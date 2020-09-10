@@ -75,11 +75,9 @@ public class BiliTool {
         ArrayList<FutureTask<ByteArrayOutputStream>> downDataArrayList = new ArrayList<>();
         for (int i = 0; i < packNum - 1; i++) {
             downData downData = new downData(videoUrl, (0 + packAvg * i) + "-" + (packAvg * (i + 1) - 1), BV, "https://www.bilibili.com");
-            //downData.setName("video:"+i);
             downDataArrayList.add(new FutureTask<ByteArrayOutputStream>(downData));
         }
         downData downData = new downData(videoUrl, (packAvg * (packNum - 1)) + "-" + (s2 - 1), BV, "https://www.bilibili.com");
-        //downData.setName("video:"+5);
         downDataArrayList.add(new FutureTask<ByteArrayOutputStream>(downData));
 
         for (FutureTask<ByteArrayOutputStream> byteArrayOutputStreamFutureTask : downDataArrayList) {
@@ -152,9 +150,6 @@ class donwLoad implements Callable {
 
 class downData implements Callable {
     private SocketGetTools socketTools;
-    public void setName(String name){
-        socketTools.setName(name);
-    }
     public downData(String url, String range, String referer, String Origin) {
         socketTools = new SocketGetTools(url);
         socketTools.getHost();

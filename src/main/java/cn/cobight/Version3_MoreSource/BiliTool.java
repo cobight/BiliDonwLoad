@@ -173,9 +173,6 @@ class donwLoad implements Callable {
 
 class downData implements Callable {
     private SocketGetTools socketTools;
-    public void setName(String name){
-        socketTools.setName(name);
-    }
     public downData(String url, String range, String referer, String Origin) {
         socketTools = new SocketGetTools(url);
         socketTools.getHost();

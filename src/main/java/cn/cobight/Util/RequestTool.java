@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 /**
- * fileName:RuquestTool 不好用，Origin头不让添加
- * description:
+ * fileName:RuquestTool
+ * description: 不好用，Origin头不让添加，本工具类是常规http交互工具类
  * author:cobight
  * createTime:2020/9/4 14:15
  * version:1.0.0
