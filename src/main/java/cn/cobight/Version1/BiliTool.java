@@ -2,7 +2,7 @@ package cn.cobight.Version1;
 
 
 import cn.cobight.Util.RequestTool;
-import cn.cobight.Util.SocketGetTools;
+import cn.cobight.Util.SocketSpiderTool;
 import com.jayway.jsonpath.JsonPath;
 
 import java.io.*;
@@ -19,10 +19,10 @@ import java.util.concurrent.*;
  */
 public class BiliTool {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        long start = System.currentTimeMillis();
+
         downbili("BV1o5411873u");
-        long stop = System.currentTimeMillis();
-        System.out.println("未用多线程分包下载： "+(stop - start) / 1000 + "秒");
+
+
     }
 
     public static void downbili(String bvPath) {
@@ -42,9 +42,10 @@ public class BiliTool {
         String audioInitialization = JsonPath.parse(mediaJson).read("$.data.dash.audio[0].SegmentBase.Initialization");
         String audioindexRange = JsonPath.parse(mediaJson).read("$.data.dash.audio[0].SegmentBase.indexRange");
         System.out.println(audioUrl + "\n" + audioInitialization + "\n" + audioindexRange);
-
+        System.out.println("开始下载数据");
         //通过 Executors获取一个定长的线程池  定长为3 超过线程池长度时就会等待
         ExecutorService executorService = Executors.newFixedThreadPool(3);//返回一个执行器的服务类
+        long start = System.currentTimeMillis();
         //使用线程池启动线程
         donwLoad audio = new donwLoad(audioUrl, audioindexRange, BV, "https://www.bilibili.com");
         donwLoad video = new donwLoad(videoUrl, videoindexRange, BV, "https://www.bilibili.com");
@@ -76,7 +77,9 @@ public class BiliTool {
         while (true) {
             if (executorService.isTerminated())break;
         }
-        System.out.println("thread shut down");
+        System.out.println("thread shut down,开始合并");
+        long stop = System.currentTimeMillis();
+        System.out.println("未用多线程分包下载： "+(stop - start) / 1000 + "秒");
         Runtime runtime = Runtime.getRuntime();
         try {
             runtime.exec("download/ffmpeg.exe -i download/video.m4s -i download/audio.m4s -codec copy download/" + bvPath + ".mp4");
@@ -87,10 +90,10 @@ public class BiliTool {
 }
 
 class donwLoad implements Callable {
-    private SocketGetTools socketTools;
+    private SocketSpiderTool socketTools;
 
     public donwLoad(String url, String range, String referer, String Origin) {
-        socketTools = new SocketGetTools(url);
+        socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
         socketTools.setHeader("Connection", "keep-alive");
         socketTools.setHeader("Origin", Origin);
@@ -122,11 +125,11 @@ class donwLoad implements Callable {
 }
 
 class writeRun implements Runnable {
-    private SocketGetTools socketTools;
+    private SocketSpiderTool socketTools;
     private String path;
 
     public writeRun(String url, String range, String referer, String Origin, String path) {
-        socketTools = new SocketGetTools(url);
+        socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
         socketTools.setHeader("Connection", "keep-alive");
         socketTools.setHeader("Origin", Origin);

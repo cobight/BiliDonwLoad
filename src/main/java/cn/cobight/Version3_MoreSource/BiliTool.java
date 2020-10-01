@@ -2,7 +2,7 @@ package cn.cobight.Version3_MoreSource;
 
 
 import cn.cobight.Util.RequestTool;
-import cn.cobight.Util.SocketGetTools;
+import cn.cobight.Util.SocketSpiderTool;
 import com.jayway.jsonpath.JsonPath;
 
 import java.io.ByteArrayOutputStream;
@@ -138,10 +138,10 @@ public class BiliTool {
 }
 
 class donwLoad implements Callable {
-    private SocketGetTools socketTools;
+    private SocketSpiderTool socketTools;
 
     public donwLoad(String url, String range, String referer, String Origin) {
-        socketTools = new SocketGetTools(url);
+        socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
         socketTools.setHeader("Connection", "keep-alive");
         socketTools.setHeader("Origin", Origin);
@@ -172,9 +172,9 @@ class donwLoad implements Callable {
 }
 
 class downData implements Callable {
-    private SocketGetTools socketTools;
+    private SocketSpiderTool socketTools;
     public downData(String url, String range, String referer, String Origin) {
-        socketTools = new SocketGetTools(url);
+        socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
         socketTools.setHeader("Connection", "keep-alive");
         socketTools.setHeader("Origin", Origin);

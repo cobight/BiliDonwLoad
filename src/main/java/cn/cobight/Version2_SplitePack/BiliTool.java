@@ -2,7 +2,7 @@ package cn.cobight.Version2_SplitePack;
 
 
 import cn.cobight.Util.RequestTool;
-import cn.cobight.Util.SocketGetTools;
+import cn.cobight.Util.SocketSpiderTool;
 import com.jayway.jsonpath.JsonPath;
 
 import java.io.*;
@@ -27,7 +27,7 @@ public class BiliTool {
     }
 
     public static void downbili(String bvPath) throws ExecutionException, InterruptedException, IOException {
-        long start = System.currentTimeMillis();
+
         String BV = "https://www.bilibili.com/video/" + bvPath;
         //第一个请求偷下懒，没用socket
         String HTML = RequestTool.sendGet(BV, null);
@@ -46,6 +46,7 @@ public class BiliTool {
         System.out.println(audioUrl + "\n" + audioInitialization + "\n" + audioIndexRange);
         //通过 Executors获取一个定长的线程池  定长为3 超过线程池长度时就会等待
         ExecutorService executorService = Executors.newFixedThreadPool(10);//返回一个执行器的服务类
+        long start = System.currentTimeMillis();
         //使用线程池启动线程
         donwLoad audio = new donwLoad(audioUrl, audioIndexRange, BV, "https://www.bilibili.com");
         donwLoad video = new donwLoad(videoUrl, videoIndexRange, BV, "https://www.bilibili.com");
@@ -79,7 +80,7 @@ public class BiliTool {
         }
         downData downData = new downData(videoUrl, (packAvg * (packNum - 1)) + "-" + (s2 - 1), BV, "https://www.bilibili.com");
         downDataArrayList.add(new FutureTask<ByteArrayOutputStream>(downData));
-
+        //开始下载视频
         for (FutureTask<ByteArrayOutputStream> byteArrayOutputStreamFutureTask : downDataArrayList) {
             executorService.execute(byteArrayOutputStreamFutureTask);
         }
@@ -91,6 +92,7 @@ public class BiliTool {
         System.out.println("音频： "+(audiotime - start) / 1000 + "秒");
         audioByteArrayOutputStream.flush();
         audioByteArrayOutputStream.close();
+        //视频
         ByteArrayOutputStream videoByteArrayOutputStream = new ByteArrayOutputStream();
         for (FutureTask<ByteArrayOutputStream> byteArrayOutputStreamFutureTask : downDataArrayList) {
             ByteArrayOutputStream byteArrayOutputStream = byteArrayOutputStreamFutureTask.get();
@@ -115,10 +117,10 @@ public class BiliTool {
 }
 
 class donwLoad implements Callable {
-    private SocketGetTools socketTools;
+    private SocketSpiderTool socketTools;
 
     public donwLoad(String url, String range, String referer, String Origin) {
-        socketTools = new SocketGetTools(url);
+        socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
         socketTools.setHeader("Connection", "keep-alive");
         socketTools.setHeader("Origin", Origin);
@@ -149,9 +151,9 @@ class donwLoad implements Callable {
 }
 
 class downData implements Callable {
-    private SocketGetTools socketTools;
+    private SocketSpiderTool socketTools;
     public downData(String url, String range, String referer, String Origin) {
-        socketTools = new SocketGetTools(url);
+        socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
         socketTools.setHeader("Connection", "keep-alive");
         socketTools.setHeader("Origin", Origin);
@@ -166,7 +168,12 @@ class downData implements Callable {
     @Override
     public Object call() {
         try {
+            System.out.println("开始下载视频块");
+            long st = System.currentTimeMillis();
+
             socketTools.sendGet();
+            long sto = System.currentTimeMillis();
+            System.out.println("下载一个视频块： "+(st - sto) / 1000 + "秒");
             return socketTools.getByteArrayOutputStream();
         } catch (IOException e) {
             e.printStackTrace();

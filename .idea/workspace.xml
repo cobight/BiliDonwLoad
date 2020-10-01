@@ -42,6 +42,14 @@
     <property name="settings.editor.selected.configurable" value="editing.templates" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\JAVA\secondstage\BiliDonwLoad\download" />
+      <recent name="F:\JAVA\secondstage\BiliDonwLoad\src\main\resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="cn.cobight.Util" />
+      <recent name="cn.cobight.socketSend" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\JAVA\secondstage\BiliDonwLoad\src\main\java\cn\cobight\Version3_MoreSource" />
       <recent name="F:\JAVA\secondstage\BiliDonwLoad\src\main\java\cn\cobight\Version2_SplitePack" />
@@ -49,15 +57,8 @@
       <recent name="F:\JAVA\secondstage\BiliDonwLoad\src\main\java\cn\cobight" />
       <recent name="F:\JAVA\secondstage\BiliDonwLoad\src\main\java" />
     </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="cn.cobight.socketSend" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="F:\JAVA\secondstage\BiliDonwLoad\download" />
-      <recent name="F:\JAVA\secondstage\BiliDonwLoad\src\main\resources" />
-    </key>
   </component>
-  <component name="RunManager" selected="Application.BiliTool (1)">
+  <component name="RunManager" selected="Application.BiliTool">
     <configuration name="BiliTool (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.cobight.Version2_SplitePack.BiliTool" />
       <module name="BiliDonwLoad" />
@@ -125,9 +126,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.BiliTool" />
         <item itemvalue="Application.BiliTool (1)" />
         <item itemvalue="Application.BiliTool (2)" />
-        <item itemvalue="Application.BiliTool" />
         <item itemvalue="Application.Demo1" />
         <item itemvalue="Application.SocketTest" />
       </list>
@@ -155,6 +156,11 @@
       <workItem from="1599526477012" duration="2045000" />
       <workItem from="1599648634814" duration="3006000" />
       <workItem from="1599699169619" duration="640000" />
+      <workItem from="1599815925593" duration="129000" />
+      <workItem from="1600051028841" duration="12000" />
+      <workItem from="1600869789116" duration="1029000" />
+      <workItem from="1600907225982" duration="382000" />
+      <workItem from="1601539877548" duration="2448000" />
     </task>
     <servers />
   </component>
@@ -174,22 +180,26 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="765" y="223" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1599375528279" />
-    <state width="1877" height="61" key="GridCell.Tab.0.bottom" timestamp="1599699811840">
+    <state x="690" y="265" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1601539895279">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="61" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1599699811840" />
-    <state width="1877" height="61" key="GridCell.Tab.0.center" timestamp="1599699811840">
+    <state x="690" y="265" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1601539895279" />
+    <state width="1877" height="432" key="GridCell.Tab.0.bottom" timestamp="1601542032257">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="61" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1599699811840" />
-    <state width="1877" height="61" key="GridCell.Tab.0.left" timestamp="1599699811840">
+    <state width="1877" height="432" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1601542032257" />
+    <state width="1877" height="432" key="GridCell.Tab.0.center" timestamp="1601542032257">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="61" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1599699811840" />
-    <state width="1877" height="61" key="GridCell.Tab.0.right" timestamp="1599699811840">
+    <state width="1877" height="432" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1601542032257" />
+    <state width="1877" height="432" key="GridCell.Tab.0.left" timestamp="1601542032257">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="61" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1599699811840" />
+    <state width="1877" height="432" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1601542032257" />
+    <state width="1877" height="432" key="GridCell.Tab.0.right" timestamp="1601542032257">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="432" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1601542032257" />
     <state x="453" y="161" key="SettingsEditor" timestamp="1599305137719">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
