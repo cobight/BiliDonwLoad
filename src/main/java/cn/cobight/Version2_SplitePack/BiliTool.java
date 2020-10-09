@@ -46,7 +46,7 @@ public class BiliTool {
         System.out.println(audioUrl + "\n" + audioInitialization + "\n" + audioIndexRange);
         //通过 Executors获取一个定长的线程池  定长为3 超过线程池长度时就会等待
         ExecutorService executorService = Executors.newFixedThreadPool(10);//返回一个执行器的服务类
-        long start = System.currentTimeMillis();
+
         //使用线程池启动线程
         donwLoad audio = new donwLoad(audioUrl, audioIndexRange, BV, "https://www.bilibili.com");
         donwLoad video = new donwLoad(videoUrl, videoIndexRange, BV, "https://www.bilibili.com");
@@ -67,6 +67,8 @@ public class BiliTool {
             System.out.println("出现异常，无法获取文件总长度，结束进程！");
             return;
         }
+        System.out.println("下载数据");
+        long start = System.currentTimeMillis();
         //下载最大range
         downData audio1 = new downData(audioUrl, "0-" + (s1 - 1), BV, "https://www.bilibili.com");
         FutureTask<ByteArrayOutputStream> audioFutureTask1 = new FutureTask<ByteArrayOutputStream>(audio1);
@@ -85,13 +87,7 @@ public class BiliTool {
             executorService.execute(byteArrayOutputStreamFutureTask);
         }
         executorService.shutdown();
-        //音频较小，会很快，所以先输出音频
-        ByteArrayOutputStream audioByteArrayOutputStream = audioFutureTask1.get();
-        audioByteArrayOutputStream.writeTo(new FileOutputStream("download/audio.m4s"));
-        long audiotime = System.currentTimeMillis();
-        System.out.println("音频： "+(audiotime - start) / 1000 + "秒");
-        audioByteArrayOutputStream.flush();
-        audioByteArrayOutputStream.close();
+
         //视频
         ByteArrayOutputStream videoByteArrayOutputStream = new ByteArrayOutputStream();
         for (FutureTask<ByteArrayOutputStream> byteArrayOutputStreamFutureTask : downDataArrayList) {
@@ -102,9 +98,16 @@ public class BiliTool {
         }
         videoByteArrayOutputStream.writeTo(new FileOutputStream("download/video.m4s"));
         long videotime = System.currentTimeMillis();
-        System.out.println("视频： "+(videotime - start) / 1000 + "秒");
+        System.out.println("视频： " + (videotime - start) / 1000 + "秒");
         videoByteArrayOutputStream.flush();
         videoByteArrayOutputStream.close();
+        //音频较小，会很快，所以先输出音频
+        ByteArrayOutputStream audioByteArrayOutputStream = audioFutureTask1.get();
+        audioByteArrayOutputStream.writeTo(new FileOutputStream("download/audio.m4s"));
+        long audiotime = System.currentTimeMillis();
+        System.out.println("音频： " + (audiotime - start) / 1000 + "秒");
+        audioByteArrayOutputStream.flush();
+        audioByteArrayOutputStream.close();
         Runtime runtime = Runtime.getRuntime();
         try {
             runtime.exec("download/ffmpeg.exe -i download/video.m4s -i download/audio.m4s -codec copy download/" + bvPath + ".mp4");
@@ -112,10 +115,11 @@ public class BiliTool {
             e.printStackTrace();
         }
         long stop = System.currentTimeMillis();
-        System.out.println("用多线程分包下载： "+(stop - start) / 1000 + "秒");
+        System.out.println("用多线程分包下载： " + (stop - start) / 1000 + "秒");
     }
 }
 
+//获取长度
 class donwLoad implements Callable {
     private SocketSpiderTool socketTools;
 
@@ -150,8 +154,10 @@ class donwLoad implements Callable {
     }
 }
 
+//下载
 class downData implements Callable {
     private SocketSpiderTool socketTools;
+
     public downData(String url, String range, String referer, String Origin) {
         socketTools = new SocketSpiderTool(url);
         socketTools.getHost();
@@ -168,12 +174,11 @@ class downData implements Callable {
     @Override
     public Object call() {
         try {
-            System.out.println("开始下载视频块");
-            long st = System.currentTimeMillis();
-
+            //System.out.println("开始下载数据块");
+            //long st = System.currentTimeMillis();
             socketTools.sendGet();
-            long sto = System.currentTimeMillis();
-            System.out.println("下载一个视频块： "+(st - sto) / 1000 + "秒");
+            //long sto = System.currentTimeMillis();
+            //System.out.println("下载一个数据块： " + (sto - st) / 1000 + "秒");
             return socketTools.getByteArrayOutputStream();
         } catch (IOException e) {
             e.printStackTrace();

@@ -18,6 +18,10 @@ import java.util.concurrent.*;
  * version:1.0.0
  */
 public class BiliTool {
+    static {
+        System.out.println("Version : 1");
+    }
+
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
         downbili("BV1o5411873u");
@@ -45,7 +49,7 @@ public class BiliTool {
         System.out.println("开始下载数据");
         //通过 Executors获取一个定长的线程池  定长为3 超过线程池长度时就会等待
         ExecutorService executorService = Executors.newFixedThreadPool(3);//返回一个执行器的服务类
-        long start = System.currentTimeMillis();
+
         //使用线程池启动线程
         donwLoad audio = new donwLoad(audioUrl, audioindexRange, BV, "https://www.bilibili.com");
         donwLoad video = new donwLoad(videoUrl, videoindexRange, BV, "https://www.bilibili.com");
@@ -65,7 +69,7 @@ public class BiliTool {
             return;
         }
 
-
+        long start = System.currentTimeMillis();
         //下载最大range
         writeRun audio1 = new writeRun(audioUrl, "0-" + (Integer.parseInt(s1) - 1), BV, "https://www.bilibili.com", "download/audio.m4s");
         writeRun video1 = new writeRun(videoUrl, "0-" + (Integer.parseInt(s2) - 1), BV, "https://www.bilibili.com", "download/video.m4s");
@@ -75,11 +79,11 @@ public class BiliTool {
         executorService.shutdown();
 
         while (true) {
-            if (executorService.isTerminated())break;
+            if (executorService.isTerminated()) break;
         }
         System.out.println("thread shut down,开始合并");
         long stop = System.currentTimeMillis();
-        System.out.println("未用多线程分包下载： "+(stop - start) / 1000 + "秒");
+        System.out.println("未用多线程分包下载： " + (stop - start) / 1000 + "秒");
         Runtime runtime = Runtime.getRuntime();
         try {
             runtime.exec("download/ffmpeg.exe -i download/video.m4s -i download/audio.m4s -codec copy download/" + bvPath + ".mp4");
@@ -145,8 +149,11 @@ class writeRun implements Runnable {
     @Override
     public void run() {
         try {
+            long st = System.currentTimeMillis();
             socketTools.sendGet();
-            System.out.println("开始写入：" + this.path);
+            long sto = System.currentTimeMillis();
+            System.out.println("下载一个数据块： " + (sto - st) / 1000 + "秒");
+            //System.out.println("开始写入：" + this.path);
             socketTools.writeToFile(this.path);
         } catch (IOException e) {
             e.printStackTrace();

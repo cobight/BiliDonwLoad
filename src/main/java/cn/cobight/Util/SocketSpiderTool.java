@@ -20,13 +20,13 @@ public class SocketSpiderTool {
     private String host;//截取传入网址的开头host
     private String param;//截取传入网址的参数部分
     private byte[] reqBody;
-    private boolean getBody = true;//是否只获取响应头，默认为true则获取响应体
+    private volatile boolean getBody = true;//是否只获取响应头，默认为true则获取响应体
     private String responseCode;//200
     private String responseState;//ok
     private boolean isChunked = false;
-    private Map<String, String> headers = new LinkedHashMap<>();//请求头map
-    private Map<String, String> responseHeader = new LinkedHashMap<>();//响应头map
-    private ByteArrayOutputStream byteArrayOutputStream;//响应体的字节保存
+    private volatile Map<String, String> headers = new LinkedHashMap<>();//请求头map
+    private volatile Map<String, String> responseHeader = new LinkedHashMap<>();//响应头map
+    private volatile ByteArrayOutputStream byteArrayOutputStream;//响应体的字节保存
 
     /*构造方法*/
     public SocketSpiderTool(String url) {
@@ -108,14 +108,12 @@ public class SocketSpiderTool {
     public void sendGet() throws IOException {
         final Socket socket;
         if (this.url.substring(0, 5).equals("https")) {
-            //System.out.println("https");
-
             socket = (SSLSocket) ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(this.host, 443);
         } else {
             socket = new Socket(this.host, 80);
         }
-        OutputStream outputStream = socket.getOutputStream();
-        InputStream inputStream = socket.getInputStream();
+        final OutputStream outputStream = socket.getOutputStream();
+        final InputStream inputStream = socket.getInputStream();
         //以字节的形式发送请求头
         byte[] bytes = getRequestHeader().getBytes();
         outputStream.write(bytes);
@@ -124,6 +122,7 @@ public class SocketSpiderTool {
 //        }
         outputStream.flush();
         System.out.println("start read");
+        long st = System.currentTimeMillis();
         //准备存放响应体的字节流
         byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] temp = new byte[2048];
@@ -142,6 +141,8 @@ public class SocketSpiderTool {
                 byteArrayOutputStream.flush();
             }
         }
+        long sto = System.currentTimeMillis();
+        System.out.println("下载一个body： " + (sto - st) / 1000 + "秒");
         byteArrayOutputStream.close();
         inputStream.close();
         outputStream.close();
@@ -149,7 +150,7 @@ public class SocketSpiderTool {
     }
 
     /*SENDPOST*/
-    public void sendPost() throws IOException {
+    public synchronized void sendPost() throws IOException {
         Socket socket = null;
         if (this.url.substring(0, 5).equals("https")) {
             socket = (SSLSocket) ((SSLSocketFactory) SSLSocketFactory.getDefault()).createSocket(this.host, 443);
